@@ -1,0 +1,52 @@
+POST https://localhost:9443/
+Content-Type: application/json
+
+{}
+
+###
+GET https://localhost:9443/scala/index
+Accept: application/json
+
+###
+
+
+###
+POST https://localhost:9443/ebean/save
+token:{{auth_token}}
+Content-Type: application/json
+
+{
+  "name": 123
+}
+
+###
+GET https://localhost:9443/ebean/batch_save
+Accept: application/json
+
+###
+GET https://localhost:9443/redis/setKey
+Accept: application/json
+
+###
+GET https://localhost:9443
+Accept: application/json
+
+
+###
+GET https://localhost:9443/business/shopNo
+Accept: application/json
+
+###
+GET https://localhost:9443/ebean/testList
+Accept: application/json
+
+###
+GET https://localhost:9443/ebean/test_list
+Accept: application/json
+
+###
+
+GET https://localhost:9443/token
+Accept: application/json
+
+> {% client.global.set("auth_token", response.body.object.token); %}

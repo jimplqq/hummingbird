@@ -1,0 +1,22 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                        controllers.jav.Application.index
+
+GET         /token                   @controllers.jav.token.TokenController.token
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file            controllers.Assets.versioned(path="/public", file: Asset)
+
+GET         /scala/index             controllers.scala.TestController.index
+POST        /scala/test/save         controllers.scala.aos.AosController.save
+
+POST        /ebean/save              controllers.jav.test.EbeanTestController.save(request:Request)
+GET         /ebean/testList          controllers.jav.test.EbeanTestController.testList
+GET         /ebean/test_list         controllers.jav.test.EbeanTestController.test_list
+GET         /ebean/batchSave         controllers.jav.test.EbeanTestController.batchSave
+GET         /ebean/batch_save        controllers.jav.test.EbeanTestController.batch_save
+GET         /business/shopNo         controllers.jav.aos5.business.shop_no.ShopNoController.shopNo()
+GET         /redis/setKey            controllers.jav.test.RedisTestController.setKey()
