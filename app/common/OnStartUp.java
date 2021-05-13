@@ -2,7 +2,7 @@ package common;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import common.init.nacos.Nacaos;
+import common.nacos.init.nacos.Nacaos;
 import play.Application;
 import play.Logger;
 

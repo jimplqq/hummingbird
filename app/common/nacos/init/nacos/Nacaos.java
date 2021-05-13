@@ -1,4 +1,4 @@
-package common.init.nacos;
+package common.nacos.init.nacos;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
