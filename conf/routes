@@ -20,3 +20,5 @@ GET         /ebean/batchSave         controllers.jav.test.EbeanTestController.ba
 GET         /ebean/batch_save        controllers.jav.test.EbeanTestController.batch_save
 GET         /business/shopNo         controllers.jav.aos5.business.shop_no.ShopNoController.shopNo()
 GET         /redis/setKey            controllers.jav.test.RedisTestController.setKey()
+
+GET         /rabbit/send             controllers.jav.rabbit.RabbitController.send()
