@@ -2,6 +2,8 @@ import play.core.PlayVersion.akkaVersion
 import play.core.PlayVersion.akkaHttpVersion
 import play.grpc.gen.javadsl.{PlayJavaClientCodeGenerator, PlayJavaServerCodeGenerator}
 import play.sbt.PlayImport
+import com.typesafe.sbt.SbtMultiJvm.multiJvmSettings
+import com.typesafe.sbt.SbtMultiJvm.MultiJvmKeys.MultiJvm
 
 organization := "com.gin"
 name := "hummingbird"
@@ -15,6 +17,8 @@ lazy val `hummingbird` = (project in file("."))
   .enablePlugins(AkkaGrpcPlugin) // enables source generation for gRPC
   .enablePlugins(PlayAkkaHttp2Support) // enables serving HTTP/2 and gRPC
   .enablePlugins(PlayEbean) // ebean
+  .enablePlugins(MultiJvmPlugin)
+  .settings(multiJvmSettings: _*)
   // #grpc_play_plugins
   .settings(
     resolvers ++= Seq(
@@ -46,6 +50,7 @@ lazy val `hummingbird` = (project in file("."))
   .settings(
     libraryDependencies ++= CompileDeps
   )
+  .configs (MultiJvm)
 
 unmanagedBase := baseDirectory.value / "lib"
 
@@ -56,6 +61,7 @@ javacOptions ++= List("-Xlint:unchecked", "-Xlint:deprecation")
 val CompileDeps = Seq(
   PlayImport.guice,
   PlayImport.cacheApi,
+  javaClusterSharding,
   guice,
   javaJdbc,
   javaWs,
@@ -103,6 +109,8 @@ libraryDependencies += "cglib" % "cglib" % "3.3.0"
 libraryDependencies += play.sbt.PlayImport.cacheApi
 // include play-redis library
 libraryDependencies += "com.github.karelcemus" %% "play-redis" % "2.6.1"
+// https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
+libraryDependencies += "com.rabbitmq" % "amqp-client" % "5.12.0"
 
 
 //libraryDependencies += "com.github.tuxBurner" %% "play-akkajobs" % "2.6.1"
@@ -110,13 +118,12 @@ libraryDependencies += "com.github.karelcemus" %% "play-redis" % "2.6.1"
 // https://mvnrepository.com/artifact/com.auth0/java-jwt
 //libraryDependencies += "com.auth0" % "java-jwt" % "3.16.0" % "provided"
 
-
-
+jvmOptions in MultiJvm := Seq("-Xmx256M")
 
 javaOptions in Universal ++= Seq(
   // JVM memory tuning
-//  "-J-Xmx512m",
-//  "-J-Xms128m",
+  //  "-J-Xmx512m",
+  //  "-J-Xms128m",
   "-J-Xms128M -J-Xmx512m -J-server",
 
   // Since play uses separate pidfile we have to provide it with a proper path
@@ -134,6 +141,8 @@ javaOptions in Universal ++= Seq(
 
   // You may also want to include this setting if you use play evolutions
   //  "-DapplyEvolutions.default=true"
+
+  "-Dplay.server.https.engineProvider=common.ssl.CustomSSLEngineProvider"
 )
 
 sources in(Compile, doc) := Seq.empty

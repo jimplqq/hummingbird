@@ -2,6 +2,8 @@ package common.handler;
 
 import com.typesafe.config.Config;
 import common.myException.ResultModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Environment;
 import play.api.OptionalSourceMapper;
 import play.api.UsefulException;
@@ -20,6 +22,7 @@ import java.util.concurrent.CompletionStage;
 
 /** Created by questiny on 17-2-23. */
 public class ErrorHandler extends DefaultHttpErrorHandler implements HttpErrorHandler {
+  private static final Logger logger = LoggerFactory.getLogger(ErrorHandler.class);
 
   @Inject
   public ErrorHandler(
@@ -54,8 +57,15 @@ public class ErrorHandler extends DefaultHttpErrorHandler implements HttpErrorHa
 
   @Override
   public CompletionStage<Result> onServerError(Http.RequestHeader request, Throwable exception) {
+    String code = "ec" + System.currentTimeMillis();
+    CompletableFuture.runAsync(() -> this.logMsg(exception, code));
     return CompletableFuture.completedFuture(
         Results.internalServerError(
-            Json.toJson(ResultModel.resultModelFalse(exception.getMessage(), -1))));
+            Json.toJson(ResultModel.resultModelFalse(exception.getMessage() + "-" + code, -1))));
+  }
+
+  public void logMsg(Throwable exception, String code) {
+    logger.error("code:{}", code);
+    exception.printStackTrace();
   }
 }

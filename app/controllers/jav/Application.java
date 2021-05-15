@@ -7,7 +7,6 @@ import play.mvc.Result;
 public class Application extends Controller {
 
   public Result index() {
-    Integer.parseInt("+1");
     return ok("hello world");
   }
 
