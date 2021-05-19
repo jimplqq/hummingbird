@@ -14,3 +14,5 @@ libraryDependencies += "com.lightbend.play" %% "play-grpc-generators" % playGrpc
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-multi-jvm" % "0.4.0")
