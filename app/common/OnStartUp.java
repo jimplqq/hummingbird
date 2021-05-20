@@ -8,6 +8,7 @@ import common.nacos.init.nacos.Nacaos;
 import common.rabbitmq.init.RabbitInit;
 import play.Application;
 import play.Logger;
+import scala.concurrent.ExecutionContext;
 import scala.concurrent.duration.Duration;
 
 import javax.inject.Named;
@@ -21,7 +22,7 @@ public class OnStartUp {
 
   @Inject
   public OnStartUp(
-      Application application, ActorSystem actorSystem, @Named("my-actor") ActorRef myActor) {
+          Application application, ActorSystem actorSystem, @Named("my-actor") ActorRef myActor, ExecutionContext context) {
     Nacaos.init();
     RabbitInit.getInstance().init();
     if (application.isDev()) {
@@ -42,5 +43,17 @@ public class OnStartUp {
             "receiveMq",
             actorSystem.dispatcher(),
             null);
+
+    actorSystem
+            .scheduler()
+            .schedule(
+                    Duration.create(10, TimeUnit.SECONDS),
+                    Duration.create(10, TimeUnit.SECONDS),
+                    myActor,
+                    "eleven",
+                    actorSystem.dispatcher(),
+                    null);
+
+
   }
 }
